@@ -2,7 +2,6 @@ package com.example.recipekt
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipekt.databinding.ActivityMainBinding
 
