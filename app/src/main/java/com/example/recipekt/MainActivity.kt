@@ -7,23 +7,32 @@ import com.example.recipekt.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+    var db: AppDatabase? = null
+    var recipeList = ArrayList<Recipe>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val recipeList = arrayListOf(
-                Recipes(R.drawable.dish, "볶음밥"),
-                Recipes(R.drawable.dish, "수육"),
-                Recipes(R.drawable.dish, "파채"),
-                Recipes(R.drawable.dish, "몽골리안 비프"),
-                Recipes(R.drawable.dish, "123")
+        loadData()
 
-        )
+
         binding.rvRecipe.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvRecipe.setHasFixedSize(true)
 
-        binding.rvRecipe.adapter = RecipeAdapter(recipeList)
+        val adapter = RecipeAdapter(recipeList)
 
+
+        binding.rvRecipe.adapter = adapter
+
+    }
+
+    private fun loadData() {
+        db = AppDatabase.getInstance(this)
+
+        val savedData = db!!.RecipeDAO().getAll()
+        if (savedData.isNotEmpty()) {
+            recipeList.addAll(savedData)
+        }
     }
 }
