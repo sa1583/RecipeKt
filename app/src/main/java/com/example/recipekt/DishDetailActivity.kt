@@ -26,7 +26,7 @@ class DishDetailActivity : AppCompatActivity() {
         val dishName = binding.dishName
         var gredients = loadRecipe()
 
-        var data: List<String>
+        var data: List<String> = listOf("g", "큰술", "작은술", "ml")
         var adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data)
         binding.spinGredientUnit.adapter = adapter
 
@@ -55,7 +55,9 @@ class DishDetailActivity : AppCompatActivity() {
 
         val name = binding.dishName.toString()
 
-        val savedRecipe = db!!.RecipeDAO().getRecipe(name)
-        return savedRecipe.gredients
+        val gredientDB = db!!.RecipeDAO().getGredient(name)
+        var gredients = ArrayList<Gredient>()
+        for (g in gredientDB) gredients.add(Gredient(g.gredientName, g.gredientAmount, g.gredientUnit))
+        return gredients
     }
 }

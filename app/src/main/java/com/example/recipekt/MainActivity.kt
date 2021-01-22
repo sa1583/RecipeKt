@@ -9,6 +9,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     var db: AppDatabase? = null
     var recipeList = ArrayList<Recipe>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -16,13 +17,10 @@ class MainActivity : AppCompatActivity() {
 
         loadData()
 
-
         binding.rvRecipe.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.rvRecipe.setHasFixedSize(true)
 
         val adapter = RecipeAdapter(recipeList)
-
-
         binding.rvRecipe.adapter = adapter
 
     }
@@ -30,9 +28,17 @@ class MainActivity : AppCompatActivity() {
     private fun loadData() {
         db = AppDatabase.getInstance(this)
 
-        val savedData = db!!.RecipeDAO().getAll()
-        if (savedData.isNotEmpty()) {
-            recipeList.addAll(savedData)
+        val recipeDB = db!!.RecipeDAO().getAll()
+        if (recipeDB.isNotEmpty()) {
+            for (rip in recipeDB) {
+                recipeList.add(Recipe(rip.image, rip.name, null))
+            }
+        }
+        else {
+            var gredients = ArrayList<Gredient>()
+            gredients.add(Gredient("면", 300, "g"))
+            val recipe = Recipe(null, "쫄면", gredients)
+            recipeList.add(recipe)
         }
     }
 }

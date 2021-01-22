@@ -4,11 +4,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipekt.databinding.ActivityDishDetailBinding
+import com.example.recipekt.databinding.ActivityMainBinding
+import com.example.recipekt.databinding.ListRecipeBinding
 
 class RecipeAdapter(val recipeList: ArrayList<Recipe>): RecyclerView.Adapter<RecipeAdapter.CustomViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
-        val binding = ActivityDishDetailBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ListRecipeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CustomViewHolder(binding)
     }
 
@@ -19,13 +21,13 @@ class RecipeAdapter(val recipeList: ArrayList<Recipe>): RecyclerView.Adapter<Rec
         holder.bind(recipe)
     }
 
-    class CustomViewHolder(val binding: ActivityDishDetailBinding) : RecyclerView.ViewHolder(binding.root){
+    class CustomViewHolder(val binding: ListRecipeBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(recipe: Recipe) {
             if (recipe.image == null)
-                binding.dishImage.setImageResource(R.drawable.dish)
+                binding.ivImage.setImageResource(R.drawable.dish)
             else
-                binding.dishImage.setImageResource(recipe.image)
-            binding.dishName.text = recipe.name
+                binding.ivImage.setImageResource(recipe.image)
+            binding.tvName.text = recipe.name
         }
     }
 
