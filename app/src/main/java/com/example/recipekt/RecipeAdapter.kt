@@ -1,7 +1,9 @@
 package com.example.recipekt
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.recipekt.databinding.ActivityDishDetailBinding
 import com.example.recipekt.databinding.ActivityMainBinding
@@ -19,6 +21,13 @@ class RecipeAdapter(val recipeList: ArrayList<Recipe>): RecyclerView.Adapter<Rec
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         val recipe = recipeList[position]
         holder.bind(recipe)
+        holder.itemView.setOnClickListener {
+            val intent = Intent(holder.itemView?.context, DishDetailActivity::class.java)
+            intent.putExtra("isNew", 0)
+            intent.putExtra("dishName", recipe.name)
+            intent.putExtra("dishImage", recipe.image)
+            startActivity(holder.itemView.context, intent, null)
+        }
     }
 
     class CustomViewHolder(val binding: ListRecipeBinding) : RecyclerView.ViewHolder(binding.root){
