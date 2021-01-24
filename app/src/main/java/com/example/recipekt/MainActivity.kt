@@ -1,5 +1,6 @@
 package com.example.recipekt
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +23,12 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = RecipeAdapter(recipeList)
         binding.rvRecipe.adapter = adapter
+
+        binding.fabPlus.setOnClickListener {
+            val intent = Intent(this, DishDetailActivity::class.java)
+            intent.putExtra("isNew", 1)
+            startActivity(intent)
+        }
 
     }
 
