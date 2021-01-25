@@ -29,10 +29,6 @@ class DishDetailActivity : AppCompatActivity() {
         val recyclerAdapter = GredientsAdapter()
         binding.rvGredientList.adapter = recyclerAdapter
 
-
-        val dishName: String
-        val dishImage: String
-
         db = AppDatabase.getInstance(this)!!
 
         // 새 레시피 생성
@@ -43,7 +39,7 @@ class DishDetailActivity : AppCompatActivity() {
         // 기존 레시피 수정
         else {
             binding.inputDishName.visibility = View.INVISIBLE
-            dishName = intent.getStringExtra("dishName").toString()
+            val dishName = intent.getStringExtra("dishName").toString()
             // 이미지 받기(미완)
             //dishImage = intent.getByteArrayExtra(("dishImage").toString()
             binding.dishName.text = dishName
@@ -85,17 +81,25 @@ class DishDetailActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             val dbRecipe = DBRecipe(binding.inputDishName.text.toString(), binding.dishImage.toString())
             val dbGredients = mutableListOf<DBGredient>()
-            db.RecipeDAO().insertRecipe(dbRecipe)
             for (g in recyclerAdapter.gredients) dbGredients.add(DBGredient(dbRecipe.name, g.name, g.Amount, g.Unit))
+            db.RecipeDAO().insertRecipe(dbRecipe)
             for (dbG in dbGredients) db.RecipeDAO().insertGredients(dbG)
             startActivity(intent)
         }
 
         // 삭제 버튼
         binding.btnDelete.setOnClickListener {
+            val dishName = binding.dishName.text.toString()
+            val intent = Intent(this, MainActivity::class.java)
+            val dbRecipe: DBRecipe = db.RecipeDAO().getRecipe(dishName)
+            db.RecipeDAO().getGredient(dishName)
+            for (dbG in db.RecipeDAO().getGredient(dishName)) db.RecipeDAO().deleteGredient(dbG)
+            db.RecipeDAO().deleteRecipe(dbRecipe)
 
+            startActivity(intent)
         }
     }
+
 
     private fun initializeAddGredient() {
         binding.etGredientName.setText(null)
