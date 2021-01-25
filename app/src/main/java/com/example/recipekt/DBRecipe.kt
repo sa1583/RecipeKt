@@ -5,15 +5,15 @@ import androidx.room.*
 @Entity(tableName = "tb_recipe")
 data class DBRecipe (
     @PrimaryKey var name: String,
-    var image: Int?
+    var image: String?
 )
 
-@Entity(tableName = "tb_gredient")
+@Entity(tableName = "tb_gredient", primaryKeys = ["dishName", "gredientName"])
 data class DBGredient(
-    @PrimaryKey var dishName: String,
-    var gredientName: String,
-    var gredientAmount: Int,
-    var gredientUnit: String
+        val dishName: String,
+        val gredientName: String,
+        val gredientAmount: Int,
+        val gredientUnit: String
 )
 
 data class RecipeWithGredients(
