@@ -16,8 +16,14 @@ interface RecipeDAO {
     fun updateRecipe(vararg recipe: DBRecipe)
 
     @Insert
-    fun insertAll(vararg recipe: DBRecipe)
+    fun insertRecipe(vararg recipe: DBRecipe)
+
+    @Insert
+    fun insertGredients(vararg gredients: DBGredient)
 
     @Delete
-    fun delete(recipe: DBRecipe)
+    fun deleteRecipe(recipe: DBRecipe)
+
+    @Delete
+    fun deleteGredient(gredient: DBGredient)
 }
