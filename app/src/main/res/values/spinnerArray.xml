@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner">
+        <item>g</item>
+        <item>ml</item>
+        <item>큰술</item>
+        <item>작은술</item>
+    </string-array>
+</resources>
