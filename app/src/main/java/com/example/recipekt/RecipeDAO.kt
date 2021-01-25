@@ -9,6 +9,9 @@ interface RecipeDAO {
     @Query("SELECT * FROM tb_recipe")
     fun getAll(): Array<DBRecipe>
 
+    @Query("SELECT * FROM tb_recipe WHERE name=:name")
+    fun getRecipe(name: String): DBRecipe
+
     @Query("SELECT * FROM tb_gredient WHERE dishName=:name")
     fun getGredient(name: String): Array<DBGredient>
 
