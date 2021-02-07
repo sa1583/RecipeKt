@@ -38,11 +38,11 @@ class MainActivity : AppCompatActivity() {
         val recipeDB = db!!.RecipeDAO().getAll()
         if (recipeDB.isNotEmpty()) {
             for (rip in recipeDB) {
-                recipeList.add(Recipe(rip.image, rip.name, null))
+                recipeList.add(Recipe(null, rip.name, null))
             }
         }
         else {
-            var gredients = ArrayList<Gredient>()
+            val gredients = ArrayList<Gredient>()
             gredients.add(Gredient("면", 300, "g"))
             val recipe = Recipe(null, "쫄면", gredients)
             recipeList.add(recipe)

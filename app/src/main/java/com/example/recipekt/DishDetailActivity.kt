@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.recipekt.databinding.ActivityDishDetailBinding
@@ -29,16 +30,21 @@ class DishDetailActivity : AppCompatActivity() {
         val recyclerAdapter = GredientsAdapter()
         binding.rvGredientList.adapter = recyclerAdapter
 
+
         db = AppDatabase.getInstance(this)!!
 
         // 새 레시피 생성
         if (intent.getIntExtra("isNew", 0) == 1) {
             binding.dishName.visibility = View.INVISIBLE
+            binding.btnModify.visibility = View.INVISIBLE
+            binding.btnDelete.visibility = View.INVISIBLE
 
         }
         // 기존 레시피 수정
         else {
             binding.inputDishName.visibility = View.INVISIBLE
+            binding.btnSave.visibility = View.INVISIBLE
+            binding.btnCancle.visibility = View.INVISIBLE
             val dishName = intent.getStringExtra("dishName").toString()
             // 이미지 받기(미완)
             //dishImage = intent.getByteArrayExtra(("dishImage").toString()
@@ -69,11 +75,22 @@ class DishDetailActivity : AppCompatActivity() {
 
         //재료 추가 버튼
         binding.btnAddGredient.setOnClickListener {
-            addName = binding.etGredientName.text.toString()
-            addAmount = binding.etGredientAmount.text.toString().toInt()
-            recyclerAdapter.update(recyclerAdapter.gredients + Gredient(addName, addAmount, addUnit))
-            binding.rvGredientList.adapter = recyclerAdapter
-            initializeAddGredient()
+            var errorMsg = ""
+            if (binding.etGredientName.text.isEmpty())
+                errorMsg += "재료 이름을 입력해 주세요\n"
+            if (binding.etGredientAmount.text.isEmpty())
+                errorMsg += "재료 양을 입력해 주세요"
+            if (errorMsg.isNotEmpty()) {
+                binding.tvError.visibility = View.VISIBLE
+                binding.tvError.text = errorMsg
+            }
+            else {
+                addName = binding.etGredientName.text.toString()
+                addAmount = binding.etGredientAmount.text.toString().toInt()
+                recyclerAdapter.update(recyclerAdapter.gredients + Gredient(addName, addAmount, addUnit))
+                binding.rvGredientList.adapter = recyclerAdapter
+                initializeAddGredient()
+            }
         }
 
         // 저장 버튼
@@ -87,6 +104,16 @@ class DishDetailActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // 수정 버튼
+        binding.btnModify.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            val dbGredients = mutableListOf<DBGredient>()
+            for (g in recyclerAdapter.gredients) dbGredients.add(DBGredient(binding.dishName.text.toString(), g.name, g.Amount, g.Unit))
+            // update는 db에 이미 있는 항목만 수정, 추가 삭제를 구현해야 하니까 update말고 다른거 써야할듯
+            for (dbG in dbGredients) db.RecipeDAO().updateRecipe(dbGredients)
+            startActivity(intent)
+        }
+
         // 삭제 버튼
         binding.btnDelete.setOnClickListener {
             val dishName = binding.dishName.text.toString()
@@ -95,7 +122,6 @@ class DishDetailActivity : AppCompatActivity() {
             db.RecipeDAO().getGredient(dishName)
             for (dbG in db.RecipeDAO().getGredient(dishName)) db.RecipeDAO().deleteGredient(dbG)
             db.RecipeDAO().deleteRecipe(dbRecipe)
-
             startActivity(intent)
         }
     }

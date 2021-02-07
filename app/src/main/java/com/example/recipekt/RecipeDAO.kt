@@ -16,7 +16,7 @@ interface RecipeDAO {
     fun getGredient(name: String): Array<DBGredient>
 
     @Update
-    fun updateRecipe(vararg recipe: DBRecipe)
+    fun updateRecipe(gredients: List<DBGredient> )
 
     @Insert
     fun insertRecipe(vararg recipe: DBRecipe)

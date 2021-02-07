@@ -39,6 +39,4 @@ class RecipeAdapter(val recipeList: ArrayList<Recipe>): RecyclerView.Adapter<Rec
             binding.tvName.text = recipe.name
         }
     }
-
-
 }
